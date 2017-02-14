@@ -16,9 +16,9 @@ app.configure(function(){
   app.use(express.static(path.join(__dirname, 'public')));
 });
 
-app.configure('development', function(){
-  app.use(express.errorHandler());
-});
+//app.configure('development', function(){
+//  app.use(express.errorHandler());
+//});
 
 app.get('/', routes.index);
 app.get('/users', user.list);
