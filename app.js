@@ -1,18 +1,28 @@
-var express = require('express');
-var routes = require('./routes');
-var http = require('http');
-var	request = require('request');
-var	_ = require('underscore');
-var	url = require('url');
-var app = express();
-// serve the files out of ./public as our main files
-app.use(express.static(__dirname + '/public'));
-var appEnv = { 'port' : 3000 };
+var express = require('express')
+  , routes = require('./routes/index')
+  , user = require('./routes/user')
+  , http = require('http')
+  , path = require('path');
 
-console.log("ASF: 2017-02-14-10:24");
+var app = express();
+
+app.configure(function(){
+  app.set('port', process.env.PORT || 3000);
+  app.use(express.favicon());
+  app.use(express.logger('dev'));
+  app.use(express.bodyParser());
+  app.use(express.methodOverride());
+  app.use(app.router);
+  app.use(express.static(path.join(__dirname, 'public')));
+});
+
+app.configure('development', function(){
+  app.use(express.errorHandler());
+});
 
 app.get('/', routes.index);
+app.get('/users', user.list);
 
-app.listen(appEnv.port, function(){
-  console.log("ASF: Express server listening on port " + appEnv.port);
+http.createServer(app).listen(app.get('port'), function(){
+  console.log("Express server listening on port " + app.get('port'));
 });
