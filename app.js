@@ -17,13 +17,16 @@ var rcWarning = 1;
 var rcError   = 2;
 var rcUnknown = 99;
 
+
+console.log("AF: 2017-02-14-10:24");
+
 // Set up objects to talk to API Management
 var apimUrl = url.parse("https://api.apim.ibmcloud.com/cpocloudorg-dev/sb/rewardsapis");
 apimUrl.query = {
 	'client_id': "a765aa63-59f0-44e4-a182-cc7bfd38fec9",
 	'client_secret': "uA4bM1vL2jS2sE5oG6oK3uN5wU1eS2bW1qQ5pV1nB2dO3xQ5tR"
 };
-console.log("AF: "+JSON.stringify(apimUrl));
+console.log("AF: apimUrl="+JSON.stringify(apimUrl));
 
 function initDBConnection() {
 	dbCredentials.host = "45ccfedc-4878-41e6-920b-8de235ae90f0-bluemix.cloudant.com";
@@ -35,7 +38,7 @@ function initDBConnection() {
 	db = cloudant.use(dbCredentials.dbName);
 }
 initDBConnection();
-console.log("AF: "+JSON.stringify(dbCredentials));
+console.log("AF: dbCredentials="+JSON.stringify(dbCredentials));
 
 function errorMsgBalance(account, details) {
 	return account==="998"
