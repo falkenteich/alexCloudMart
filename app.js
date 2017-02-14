@@ -1,5 +1,4 @@
 var express = require('express');
-//AF var cfenv = require('cfenv');
 var routes = require('./routes');
 var http = require('http');
 var	request = require('request');
@@ -8,58 +7,35 @@ var	url = require('url');
 var app = express();
 // serve the files out of ./public as our main files
 app.use(express.static(__dirname + '/public'));
-//AF var appEnv = cfenv.getAppEnv();
 var appEnv = { 'port' : 3000 };
 var db;
 var cloudant;
 var dbCredentials = { dbName : 'product_db' };
-// return codes used in json responses {"RC": rcOK}  
+// return codes used in json responses
 var rcOK      = 0;
 var rcWarning = 1;
 var rcError   = 2;
 var rcUnknown = 99;
 
 // Set up objects to talk to API Management
-var rewardsCreds = null; //FIX appEnv.getServiceCreds(/NimbusRewards-CloudMart/);
-var apimUrl;
-if (rewardsCreds) {
-	apimUrl = url.parse(rewardsCreds.url);
-	apimUrl.query = {
-		'client_id': rewardsCreds.client_id,
-		'client_secret': rewardsCreds.client_secret
-	};
-} else {
-	apimUrl = url.parse("https://api.apim.ibmcloud.com/cpocloudorg-dev/sb/rewardsapis");
-	apimUrl.query = {
-		'client_id': "a765aa63-59f0-44e4-a182-cc7bfd38fec9",
-		'client_secret': "uA4bM1vL2jS2sE5oG6oK3uN5wU1eS2bW1qQ5pV1nB2dO3xQ5tR"
-	};
-}
+var apimUrl = url.parse("https://api.apim.ibmcloud.com/cpocloudorg-dev/sb/rewardsapis");
+apimUrl.query = {
+	'client_id': "a765aa63-59f0-44e4-a182-cc7bfd38fec9",
+	'client_secret': "uA4bM1vL2jS2sE5oG6oK3uN5wU1eS2bW1qQ5pV1nB2dO3xQ5tR"
+};
+console.log("AF: "+JSON.stringify(apimUrl));
 
 function initDBConnection() {
-	if (false) { //FIX process.env.VCAP_SERVICES) {
-		console.log("******** VCAP Services: "+JSON.stringify(process.env.VCAP_SERVICES));
-		var vcapServices = JSON.parse(process.env.VCAP_SERVICES);
-		if (vcapServices.cloudantNoSQLDB) {
-			dbCredentials.host = vcapServices.cloudantNoSQLDB[0].credentials.host;
-			dbCredentials.port = vcapServices.cloudantNoSQLDB[0].credentials.port;
-			dbCredentials.user = vcapServices.cloudantNoSQLDB[0].credentials.username;
-			dbCredentials.password = vcapServices.cloudantNoSQLDB[0].credentials.password;
-			dbCredentials.url = vcapServices.cloudantNoSQLDB[0].credentials.url;
-			cloudant = require('cloudant')(dbCredentials.url);
-			db = cloudant.use(dbCredentials.dbName);
-		}
-	} else {
-			dbCredentials.host = "45ccfedc-4878-41e6-920b-8de235ae90f0-bluemix.cloudant.com";
-			dbCredentials.port = 443;
-			dbCredentials.user = "45ccfedc-4878-41e6-920b-8de235ae90f0-bluemix";
-			dbCredentials.password = "fee05410105e7a16ed4df2e57a4e95f057afe44f47e52a61b6bc5cdd74794306";
-			dbCredentials.url = "https://45ccfedc-4878-41e6-920b-8de235ae90f0-bluemix:fee05410105e7a16ed4df2e57a4e95f057afe44f47e52a61b6bc5cdd74794306@45ccfedc-4878-41e6-920b-8de235ae90f0-bluemix.cloudant.com";
-			cloudant = require('cloudant')(dbCredentials.url);
-			db = cloudant.use(dbCredentials.dbName);
-	}
+	dbCredentials.host = "45ccfedc-4878-41e6-920b-8de235ae90f0-bluemix.cloudant.com";
+	dbCredentials.port = 443;
+	dbCredentials.user = "45ccfedc-4878-41e6-920b-8de235ae90f0-bluemix";
+	dbCredentials.password = "fee05410105e7a16ed4df2e57a4e95f057afe44f47e52a61b6bc5cdd74794306";
+	dbCredentials.url = "https://45ccfedc-4878-41e6-920b-8de235ae90f0-bluemix:fee05410105e7a16ed4df2e57a4e95f057afe44f47e52a61b6bc5cdd74794306@45ccfedc-4878-41e6-920b-8de235ae90f0-bluemix.cloudant.com";
+	cloudant = require('cloudant')(dbCredentials.url);
+	db = cloudant.use(dbCredentials.dbName);
 }
 initDBConnection();
+console.log("AF: "+JSON.stringify(dbCredentials));
 
 function errorMsgBalance(account, details) {
 	return account==="998"
@@ -246,5 +222,5 @@ app.get("/api/checkout", function(req, res) {
 //  console.log("Express server listening on port " + app.get('port'));
 //});
 app.listen(appEnv.port, function(){
-  console.log("Express server listening on port " + appEnv.port);
+  console.log("AF: Express server listening on port " + appEnv.port);
 });

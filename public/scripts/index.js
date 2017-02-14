@@ -60,7 +60,7 @@ function stopLoadingMessage()
 {
 	document.getElementById('shoppingCart').innerHTML = "Shopping Cart";
 }
-loadProducts();
+//AF loadProducts();
 
 function showSpinner(show,idSpinner,idButton)
 {

@@ -1,5 +1,5 @@
 {
-  "name": "cloudant_boilerplate_nodejs",
+  "name": "CloudMart",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -7,7 +7,6 @@
   },
   "dependencies": {
     "express": "4.12.x",
-    "cfenv": "1.0.x",
     "request": "^2.55.0",
     "underscore": "^1.8.3",
     "ejs": "*",
